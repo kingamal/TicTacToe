@@ -35,7 +35,11 @@ def diagonal_winner(board):
 
 
 def format_board(board):
-    joined_rows = []
-    for row in board:
-        joined_rows.append("".join(row))
+    first_row = ' '
+    for i in range(len(board)):
+        first_row += str(i + 1)
+    joined_rows = [first_row]
+    for i in range(len(board)):
+        joined_row = str(i + 1) + ''.join(board[i])
+        joined_rows.append(joined_row)
     return "\n".join(joined_rows)
