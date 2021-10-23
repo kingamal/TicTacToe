@@ -32,3 +32,10 @@ def diagonal_winner(board):
         diagonal1.append(board[i][i])
         diagonal2.append(board[i][-i-1])
     return winning_line(diagonal1) or winning_line(diagonal2)
+
+
+def format_board(board):
+    joined_rows = []
+    for row in board:
+        joined_rows.append("".join(row))
+    return "\n".join(joined_rows)
