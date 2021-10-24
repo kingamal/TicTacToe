@@ -43,3 +43,24 @@ def format_board(board):
         joined_row = str(i + 1) + ''.join(board[i])
         joined_rows.append(joined_row)
     return "\n".join(joined_rows)
+
+def play_game():
+    board = [
+        [' ', ' ', ' '],
+        [' ', ' ', ' '],
+        [' ', ' ', ' '],
+    ]
+    print(format_board(board))
+    print('\nX to play:\n')
+    play_move(board, 'X')
+    print(format_board(board))
+    print('\nO to play:\n')
+    play_move(board, 'O')
+    print(format_board(board))
+
+def play_move(board, player):
+    row = int(input()) - 1
+    col = int(input()) - 1
+    board[row][col] = player
+
+play_game()
