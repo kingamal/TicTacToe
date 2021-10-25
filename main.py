@@ -72,4 +72,22 @@ def make_board(size):
         board.append(row)
     return board
 
+def make_cube(size):
+    cube = []
+    board = make_board(size)
+    for _ in range(size):
+        cube.append(board.copy())
+    return cube
+
+def test():
+    cube = make_cube(2)
+    print(cube)
+    cube[0][0][0] = 'X'
+    print(cube)
+    print(cube[0] is cube[1])
+    print(cube[0][0] is cube[0][1])
+    print(cube[0][0] is cube[1][0])
+
+test()
+
 play_game()
