@@ -1,93 +1,73 @@
+def winning_line(strings):
+    strings = set(strings)
+    return len(strings) == 1 and ' ' not in strings
+
+
+def row_winner(board):
+    return any(winning_line(row) for row in board)
+
+
+def column_winner(board):
+    return row_winner(zip(*board))
+
+
+def main_diagonal_winner(board):
+    return winning_line(row[i] for i, row in enumerate(board))
+
+
+def diagonal_winner(board):
+    return main_diagonal_winner(board) or main_diagonal_winner(reversed(board))
+
+
 def winner(board):
     return row_winner(board) or column_winner(board) or diagonal_winner(board)
 
-def winning_line(strings):
-    piece = strings[0]
-    if piece == ' ':
-        return False
-    for entry in strings:
-        if piece != entry:
-            return False
-    return True
-
-def row_winner(board):
-    for row in board:
-        if winning_line(row):
-            return True
-    return False
-
-def column_winner(board):
-    for col in range(len(board[0])):
-        column = []
-        for row in board:
-            column.append(row[col])
-        if winning_line(column):
-            return True
-    return False
-
-def diagonal_winner(board):
-    diagonal1 = []
-    diagonal2 = []
-    for i in range(len(board)):
-        diagonal1.append(board[i][i])
-        diagonal2.append(board[i][-i-1])
-    return winning_line(diagonal1) or winning_line(diagonal2)
-
 
 def format_board(board):
-    first_row = ' '
-    for i in range(len(board)):
-        first_row += str(i + 1)
-    joined_rows = [first_row]
-    for i in range(len(board)):
-        joined_row = str(i + 1) + ''.join(board[i])
-        joined_rows.append(joined_row)
-    return "\n".join(joined_rows)
+    size = len(board)
+    line = f'\n  {"+".join("-" * size)}\n'
+    rows = [f'{i + 1} {"|".join(row)}' for i, row in enumerate(board)]
+    return f'  {" ".join(str(i + 1) for i in range(size))}\n{line.join(rows)}'
 
-def play_game():
-    board = [
-        [' ', ' ', ' '],
-        [' ', ' ', ' '],
-        [' ', ' ', ' '],
-    ]
-    print(format_board(board))
-    print('\nX to play:\n')
-    play_move(board, 'X')
-    print(format_board(board))
-    print('\nO to play:\n')
-    play_move(board, 'O')
-    print(format_board(board))
 
 def play_move(board, player):
+    print(f'{player} to play:')
     row = int(input()) - 1
     col = int(input()) - 1
     board[row][col] = player
+    print(format_board(board))
+
 
 def make_board(size):
-    board = []
-    for _ in range(size):
-        row = []
-        for _ in range(size):
-            row.append(' ')
-        board.append(row)
-    return board
+    return [[' '] * size for _ in range(size)]
 
-def make_cube(size):
-    cube = []
-    board = make_board(size)
-    for _ in range(size):
-        cube.append(board.copy())
-    return cube
 
-def test():
-    cube = make_cube(2)
-    print(cube)
-    cube[0][0][0] = 'X'
-    print(cube)
-    print(cube[0] is cube[1])
-    print(cube[0][0] is cube[0][1])
-    print(cube[0][0] is cube[1][0])
+def print_winner(player):
+    print(f'{player} wins!')
 
-test()
 
-play_game()
+def print_draw():
+    print("It's a draw!")
+
+
+def play_game(board_size, player1, player2):
+    board = make_board(board_size)
+    print(format_board(board))
+
+    player = player1
+    for _ in range(board_size * board_size):
+        play_move(board, player)
+
+        if winner(board):
+            print_winner(player)
+            return
+
+        if player == player1:
+            player = player2
+        else:
+            player = player1
+
+    print_draw()
+
+
+play_game(3, 'X', 'O')
